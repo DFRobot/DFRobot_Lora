@@ -13,9 +13,6 @@
 
 #include <DFRobot_LoRa.h>
 
-// for implicit header mode
-uint8_t _payloadLength;
-
 DFRobot_LoRa::DFRobot_LoRa()
 {
 }
@@ -37,11 +34,11 @@ void DFRobot_LoRa::pinInit()
 	pinMode(NRESETPin, OUTPUT);
 	digitalWrite(NRESETPin, LOW);
 }
-bool DFRobot_LoRa::init(uint8_t NSSPin, uint8_t NRESETPin)
+bool DFRobot_LoRa::init(uint8_t _NSSPin, uint8_t _NRESETPin)
 {
 	
-	NSSPin=NSSPin;
-	NRESETPin=NRESETPin;
+	NSSPin=_NSSPin;
+	NRESETPin=_NRESETPin;
 	
 	pinInit();
 	spiInit();

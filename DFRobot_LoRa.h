@@ -17,10 +17,10 @@
 #include <Arduino.h>
 #include <SPI.h>
 
-#if 1
+#if 1   //FireBeetle-ESP32 FireBeetle-ESP8266
 #define NSS_PIN    	D2 // 25
 #define RESET_PIN 	D3 // 26
-#else
+#else   //Arduino Uno
 #define NSS_PIN    	10
 #define RESET_PIN 	9
 #endif
