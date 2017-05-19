@@ -37,15 +37,13 @@ LoRa
 
     uint8_t readRSSI(uint8_t mode = 0);
  
-<br>
- * @n [Get the module here]
- * @n This is lora's receive and send test.
- * @n [Connection and Diagram]
- *
- * @copyright	[DFRobot](http://www.dfrobot.com), 2016
- * @copyright	GNU Lesser General Public License
- *
- * @author [yangyang]
- * @version  V1.0
- * @date  2017-04-10
- *
+* @n [Get the module here]
+* @n This is lora's receive and send test.
+* @n [Connection and Diagram]
+*
+* @copyright	[DFRobot](http://www.dfrobot.com), 2016
+* @copyright	GNU Lesser General Public License
+*
+* @author [yangyang]
+* @version  V1.0
+* @date  2017-04-10
