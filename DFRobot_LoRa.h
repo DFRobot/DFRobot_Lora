@@ -18,11 +18,11 @@
 #include <SPI.h>
 
 #if defined( ESP_PLATFORM ) || defined( ARDUINO_ARCH_FIREBEETLE8266 )  //FireBeetle-ESP32 FireBeetle-ESP8266
-  #define NSS_PIN    	D2 // 25
+  #define NSS_PIN    	D4 // 25
   #define RESET_PIN 	D3 // 26
 #else   //Arduino
-  #define NSS_PIN    	10
-  #define RESET_PIN 	9
+  #define NSS_PIN    	4
+  #define RESET_PIN 	3
 #endif
 
 /**
