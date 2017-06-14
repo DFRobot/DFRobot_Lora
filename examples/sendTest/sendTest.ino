@@ -40,7 +40,7 @@ void loop()
 	Serial.println(counter);
 
 	// send packet
-	lora.sendPackage(sendBuf, sizeof(sendBuf)); // sending data
+	lora.sendPackage(sendBuf, strlen(sendBuf)); // sending data
 	lora.idle();    // turn to standby mode
 
 	counter++;

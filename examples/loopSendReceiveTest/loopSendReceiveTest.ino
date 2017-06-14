@@ -59,7 +59,7 @@ void loop()
 		Serial.print("Sending packet: ");
 		Serial.println(counter);
 		
-		lora.sendPackage(sendBuf, sizeof(sendBuf));
+		lora.sendPackage(sendBuf, sizeof(sendBuf)-1);
 		lora.rxInit();    
 		flag = 1;             
 		counter++;
