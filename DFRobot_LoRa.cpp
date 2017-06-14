@@ -42,19 +42,19 @@ bool DFRobot_LoRa::init(uint8_t _NSSPin, uint8_t _NRESETPin)
 	
 	pinInit();
 	spiInit();
-	
+	powerOnReset();
 	// check version
-	//uint8_t version = readRegister(LR_RegVERSION);
-	//if (version != 0x12) {
-		//return 0;
-	//}
+	uint8_t version = readRegister(LR_RegVERSION);
+	if (version != 0x12) {
+		return false;
+	}
 
 	// reset lora
-	powerOnReset();
+	
 	// Set RF parameter,like frequency,data rate etc
 	config();
 
-	return 1;
+	return true;
 }
 void DFRobot_LoRa::powerOnReset()
 {
