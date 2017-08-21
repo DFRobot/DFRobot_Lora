@@ -15,14 +15,14 @@
 
 #include <DFRobot_LoRa.h>
 
-#define NSS_PIN    	D2 // 25
-#define RESET_PIN 	D3 // 26
+#define NSS_PIN    	D2 
+#define RESET_PIN 	D4 
 
 DFRobot_LoRa lora;
 
 /* The default pin:
 /		SS:D2
-/		RST:D3
+/		RST:D4
 */
 
 void setup()

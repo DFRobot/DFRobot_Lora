@@ -22,7 +22,7 @@ uint8_t sendBuf[] = "HelloWorld!";
 
 /* The default pin:
 /		SS:D2
-/		RST:D3
+/		RST:D4
 */
 
 void setup()
