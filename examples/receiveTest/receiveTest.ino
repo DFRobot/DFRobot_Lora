@@ -27,9 +27,9 @@ void setup()
 	pinMode(LED_BUILTIN, OUTPUT);
 	Serial.println("Receiver Test");
 
-	if(!lora.init()) {
+	while(!lora.init()) {
 		Serial.println("Starting LoRa failed!");
-		while (1);
+		delay(100);
 	}
 
 	lora.rxInit();    

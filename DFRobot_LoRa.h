@@ -17,10 +17,13 @@
 #include <Arduino.h>
 #include <SPI.h>
 
-#if defined( ESP_PLATFORM ) || defined( ARDUINO_ARCH_FIREBEETLE8266 )  //FireBeetle-ESP32 FireBeetle-ESP8266
-  #define NSS_PIN    	D4 // 25
-  #define RESET_PIN 	D2 // 27
-#else   //Arduino
+#if defined( ARDUINO_ESP32_DEV ) //FireBeetle-ESP32 
+  #define NSS_PIN    	D4 
+  #define RESET_PIN 	D2 
+#elif defined (ARDUINO_ARCH_FIREBEETLE8266)//FireBeetle-ESP8266
+  #define NSS_PIN    	D4 
+  #define RESET_PIN 	D3 
+#else
   #define NSS_PIN    	4
   #define RESET_PIN 	3
 #endif
@@ -337,6 +340,12 @@ public:
 	   @return   value of rssi
 	*/
 	uint8_t readRSSI(uint8_t mode = 0);
+	/**
+	   Set tx power.
+	   @param	power		    power level,0 to 15
+	   @return  1 if ok, 0 otherwise
+	*/
+	bool setTxPower(uint8_t power);
 
 protected:
 
@@ -364,12 +373,7 @@ protected:
 	*/
 	bool setPayloadLength(uint8_t len);
 	
-	/**
-	   Set tx power.
-	   @param	power		    power level,0 to 15
-	   @return  1 if ok, 0 otherwise
-	*/
-	bool setTxPower(uint8_t power);
+
 	
 	/**
 	   Set rx time out.

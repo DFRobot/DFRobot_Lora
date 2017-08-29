@@ -33,9 +33,9 @@ uint8_t rxBuf[32];
 DFRobot_LoRa lora;
 
 /* The default pin:
-/		SS:D2
-/		RST:D4
-*/
+ *		SS:D4
+ *		RST:D2 (If you are using the FireBeetle Board-ESP8266 motherboard controller, the RST defaults to D3)	
+ */
 
 void setup()
 {
@@ -44,9 +44,9 @@ void setup()
 	pinMode(LED_BUILTIN, OUTPUT);
 	Serial.println("Receiver Test");
 	
-	if(!lora.init()) {
+	while(!lora.init()) {
 		Serial.println("Starting LoRa failed!");
-		while (1);
+		delay(100);
 	}
 	
 	if(flag){

@@ -21,17 +21,17 @@ uint8_t counter = 0;
 uint8_t sendBuf[] = "HelloWorld!";
 
 /* The default pin:
-/		SS:D2
-/		RST:D4
-*/
+ *		SS:D4
+ *		RST:D2 (If you are using the FireBeetle Board-ESP8266 motherboard controller, the RST defaults to D3)	
+ */
 
 void setup()
 {
 	Serial.begin(115200);
 	
-	if(!lora.init()) {
+	while(!lora.init()) {
 		Serial.println("Starting LoRa failed!");
-		while (1);
+		delay(100);
 	}
 }
 void loop()
@@ -40,7 +40,7 @@ void loop()
 	Serial.println(counter);
 
 	// send packet
-	lora.sendPackage(sendBuf, strlen(sendBuf)); // sending data
+	lora.sendPackage(sendBuf, 11); // sending data
 	lora.idle();    // turn to standby mode
 
 	counter++;
