@@ -8,7 +8,7 @@ Provides an Arduino library for FireBeetle Covers-LoRa Radio
 
 * [Summary](#summary)
 * [Methods](#methods)
-* [Compatibility](#Compatibility)
+* [Compatibility](#compatibility)
 * [History](#history)
 * [Credits](#credits)
 <snippet>
