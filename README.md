@@ -1,4 +1,6 @@
 # Lora Module
+TEL0121 is a Lora 433M communication module based on SX1278. Users can communicate with the module with SPI.
+TEL0122 is a Lora 915M communication module based on SX1278. Users can communicate with the module with SPI.
 <img width="400" height="400" src="https://raw.githubusercontent.com/DFRobot/binaryfiles/master/TEL0122/TEL0122svg1.png"/>
 
 # DFRobot_Lora Library for Arduino
