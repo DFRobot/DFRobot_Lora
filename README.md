@@ -79,7 +79,7 @@ MCU                | Work Well | Work Wrong | Untested  | Remarks
 ------------------ | :----------: | :----------: | :---------: | -----
 FireBeetle-ESP32  |      √       |             |            | 
 FireBeetle-ESP8266  |      √       |             |            | 
-FireBeetle-BLE4.1 |      √       |             |            | 
+FireBeetle-328P |      √       |             |            | 
 
 ## History
 
