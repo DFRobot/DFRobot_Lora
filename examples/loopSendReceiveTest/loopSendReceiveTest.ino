@@ -26,7 +26,7 @@ uint8_t sendBuf[] = "BBBBB!";
 uint8_t flag = 0;
 #define DELAY_MS	500
 #endif
-uint8_t counter = 0;
+uint8_t sendCounter = 0;
 uint8_t len;
 uint8_t rxBuf[32];
 
@@ -46,7 +46,7 @@ void setup()
 	
 	while(!lora.init()) {
 		Serial.println("Starting LoRa failed!");
-		delay(100);
+    delay(2000);
 	}
 	
 	if(flag){
@@ -57,14 +57,14 @@ void loop()
 {
 	if(flag == 0) {  
 		Serial.print("Sending packet: ");
-		Serial.println(counter);
+    Serial.println(sendCounter);
 		
 		lora.sendPackage(sendBuf, sizeof(sendBuf)-1);
 		lora.rxInit();    
 		flag = 1;             
-		counter++;
+    sendCounter++;
 	} else {        
-		if(lora.waitIrq()) {               
+    if(lora.waitIrq()) {
 			lora.clearIRQFlags();
 			len = lora.receivePackage(rxBuf); 
 			flag = 0;            

@@ -15,9 +15,6 @@
 
 #include <DFRobot_LoRa.h>
 
-#define NSS_PIN    	D4 
-#define RESET_PIN 	D2 
-
 DFRobot_LoRa lora;
 
 /* The default pin:
@@ -29,13 +26,13 @@ void setup()
 {
 	Serial.begin(115200);
 	
-	while(!lora.init(D2, D3)) {
+  while(!lora.init()) {
 		Serial.println("Starting LoRa failed!");
-		delay(100);
+    delay(2000);
 	}
 	
 	// frequency:the range is 137~1020Mhz for lora1276 ,137~525Mhz for lora1278
-	lora.setFrequency(434E6); 
+  lora.setFrequency(868000000);
 	/*
 	BW	        bandwidth , range from 0 to 9
 	CR	        coding rate , range from 4/5 to 4/8---2,4,6,8

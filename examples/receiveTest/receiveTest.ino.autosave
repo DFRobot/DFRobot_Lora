@@ -2,7 +2,7 @@
  * @file receiverTest.ino
  * @brief DFRobot's received data
  * @n [Get the module here] http://wiki.dfrobot.com.cn/index.php?title=(SKU:TEL0125)FireBeetle_Covers-LoRa_Radio_868MHz
- * @n This example is receive.
+ * @n This example is receive. 
  * @n [Connection and Diagram]
  *
  * @copyright	[DFRobot](http://www.dfrobot.com), 2016

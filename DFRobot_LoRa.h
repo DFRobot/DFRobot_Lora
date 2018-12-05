@@ -36,7 +36,7 @@
  RF frequency band.Low frequency band is up to 525M
  lora1278 only support low frequency band
 */
-#define LORA_FREQUENCY_BAND			LR_LowFreqModeOn_433M
+#define LORA_FREQUENCY_BAND			LR_LowFreqModeOn_868M
 /**
  the first bit in SPI address byte is a wnr bit
  1 for write access , 0 for read access
@@ -281,7 +281,7 @@ public:
 	   @param irqMask		interrupt flag
 	   @return  1 if interrupt occur, 0 if no interrupt
 	*/
-	bool waitIrq(uint8_t irqMask = LR_RXDONE_MASK);
+  bool waitIrq(uint8_t irqMask = LR_RXDONE_MASK);
 	
 	/**
 	   Enter standby mode.
@@ -387,7 +387,7 @@ protected:
 	   Setting parameter : RF frequency=434Mhz,bandwidth = 500Hz,
 	   spreading factor=7,coding rate = 4/5,explict header mode
 	*/
-	bool config();
+  bool config(uint8_t mode);
 	
 	/**
 	   both tx data and rx data store in same fifo
@@ -455,6 +455,8 @@ protected:
 	   @param	prt		data buf
 	*/
 	void writeData(uint8_t addr, uint8_t *ptr, uint8_t len);
+
+//	void writeRegBits(uint8_t addr, uint8_t field, uint8_t data, uint8_t offset);
 	
 private:
 

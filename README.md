@@ -1,11 +1,15 @@
 # Lora Module
-TEL0121 is a Lora 433M communication module based on SX1278. Users can communicate with the module with SPI.
+TEL0121 is a Lora 433M communication module based on SX1278. Users can communicate with the module with SPI. <br>
 TEL0122 is a Lora 915M communication module based on SX1278. Users can communicate with the module with SPI.
 <img width="400" height="400" src="https://raw.githubusercontent.com/DFRobot/binaryfiles/master/TEL0122/TEL0122svg1.png"/>
 
 # DFRobot_Lora Library for Arduino
 
-Provides an Arduino library for FireBeetle Covers-LoRa Radio
+Provides an Arduino library for FireBeetle Covers-LoRa Radio. <br>
+test environment: <br>
+In city, a straight road with less obstacles. <br>
+The test available distance is 1km.
+
 ## Table of Contents
 
 * [Summary](#summary)
@@ -17,7 +21,7 @@ Provides an Arduino library for FireBeetle Covers-LoRa Radio
 <content>
 
 ## Summary
-The library is used to Send and receive GPRS or NB-IOT data (TCP,UDP)
+The library is used to Send and receive Long Range Radio data.
 
 ## Methods
 ### Initialize the function
@@ -83,8 +87,13 @@ FireBeetle-328P |      √       |             |            |
 
 ## History
 
-- data 2017-8-30
+- date 2017-8-30
 - version V1.0
+
+- date 2018-12-5
+- reviser: guojiehan jiehan.guo@dfrobot.com
+- version v1.1
+- optimization config to make the distance farther
 
 ## Credits
 
