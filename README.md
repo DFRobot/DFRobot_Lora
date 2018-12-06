@@ -6,6 +6,7 @@ TEL0122 is a Lora 915M communication module based on SX1278. Users can communica
 # DFRobot_Lora Library for Arduino
 
 Provides an Arduino library for FireBeetle Covers-LoRa Radio. <br>
+Better power supply provides farther distance. <br>
 test environment: <br>
 In city, a straight road with less obstacles. <br>
 The test available distance is 1km.
