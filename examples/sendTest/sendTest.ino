@@ -27,35 +27,35 @@ uint8_t sendBuf[] = "HelloWorld!";
 
 void setup()
 {
-	Serial.begin(115200);
+  Serial.begin(115200);
   Serial.println();
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, LOW);
-	
-	while(!lora.init()) {
-		Serial.println("Starting LoRa failed!");
+
+  while(!lora.init()) {
+    Serial.println("Starting LoRa failed!");
     delay(2000);
-	}
+  }
 }
 
 void loop()
 {
   static int blink;
-	Serial.print("Sending packet: ");
+  Serial.print("Sending packet: ");
   Serial.println(sendCounter);
   digitalWrite(LED_BUILTIN, blink);
   blink = ~blink;
 
-	// send packet
+  // send packet
   lora.sendPackage(sendBuf, sizeof(sendBuf)); // sending data
-	lora.idle();    // turn to standby mode
+  lora.idle();    // turn to standby mode
 
   sendCounter++;
 #if 0
-	if(counter%10 == 0) {
-		lora.sleep();
-		delay (5000);// sleep 5 seconds
-	}
+if(counter%10 == 0) {
+  lora.sleep();
+  delay (5000);// sleep 5 seconds
+}
 #endif
 
   delay(1000);

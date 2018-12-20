@@ -25,36 +25,36 @@ uint16_t    recvCounter = 0;
 
 void setup()
 {
-	Serial.begin(115200);
+  Serial.begin(115200);
   Serial.println();
 
   pinMode(LED_BUILTIN, OUTPUT);
-	Serial.println("Receiver Test");
+  Serial.println("Receiver Test");
 
-	while(!lora.init()) {
-		Serial.println("Starting LoRa failed!");
+  while(!lora.init()) {
+    Serial.println("Starting LoRa failed!");
     delay(2000);
-	}
+  }
 
-	lora.rxInit();    
+  lora.rxInit();
 }
 
 void loop()
 {
   if(lora.waitIrq()) {   // wait for RXDONE interrupt
-		lora.clearIRQFlags();
-		len = lora.receivePackage(rxBuf);  // receive data
-		Serial.write(rxBuf, len);    
-		Serial.println();
-		lora.rxInit();    // wait for packet from master
-		
-		// print RSSI of packet
+    lora.clearIRQFlags();
+    len = lora.receivePackage(rxBuf);  // receive data
+    Serial.write(rxBuf, len);
+    Serial.println();
+    lora.rxInit();    // wait for packet from master
+
+    // print RSSI of packet
     Serial.print("with RSSI ");
     Serial.println(lora.readRSSI());
     Serial.print("recvCounter ");
     Serial.println(recvCounter ++);
-		static uint8_t i;
-		i = ~i;
+    static uint8_t i;
+    i = ~i;
     digitalWrite(LED_BUILTIN, i);
-	}
+  }
 }
