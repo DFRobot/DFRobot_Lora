@@ -35,7 +35,7 @@ void setup()
     Serial.println("Starting LoRa failed!");
     delay(2000);
   }
-
+  lora.setPayloadLength(11);
   lora.rxInit();
 }
 

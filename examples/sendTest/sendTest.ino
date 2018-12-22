@@ -36,6 +36,7 @@ void setup()
     Serial.println("Starting LoRa failed!");
     delay(2000);
   }
+  Serial.println("LoRa begin successed");
 }
 
 void loop()

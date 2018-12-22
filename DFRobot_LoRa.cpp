@@ -20,14 +20,14 @@ void DFRobot_LoRa::spiInit()
 {
   SPI.begin();
 	//init slave select pin
-	pinMode(NSSPin, OUTPUT);
-	digitalWrite(NSSPin, HIGH);
+  pinMode(NSSPin, OUTPUT);
+  digitalWrite(NSSPin, HIGH);
 
-	// depends on DFRobot_LoRa spi timing
-  SPI.setBitOrder(MSBFIRST);
-  // too fast may cause error
-  SPI.setClockDivider(SPI_CLOCK_DIV32);
-  SPI.setDataMode(SPI_MODE0);
+//	// depends on DFRobot_LoRa spi timing
+//  SPI.setBitOrder(MSBFIRST);
+//  // too fast may cause error
+//  SPI.setClockDivider(SPI_CLOCK_DIV32);
+//  SPI.setDataMode(SPI_MODE0);
 }
 void DFRobot_LoRa::pinInit()
 {
@@ -111,54 +111,86 @@ void DFRobot_LoRa::powerOnReset()
 //	setPayloadLength(10);
 
 //}
+void DFRobot_LoRa::writeRegBits(uint8_t addr, uint8_t field, uint8_t data, uint8_t offset)
+{
+  uint8_t   val = readRegister(addr);
+  val &= ~(field << offset);
+  val |= data << offset;
+  writeRegister(addr, val);
+}
+void DFRobot_LoRa::setSymbTimeOut(uint32_t t)
+{
+  unsigned char RECVER_DAT[2];
+  RECVER_DAT[0]=readRegister( 0x1e );
+  RECVER_DAT[1]=readRegister( 0x1f );
+  RECVER_DAT[0] = ( RECVER_DAT[0] & 0xfc ) | ( ( t >> 8 ) & ~0xfc );
+  RECVER_DAT[1] = t & 0xFF;
+  writeRegister( 0x1e, RECVER_DAT[0]);
+  writeRegister( 0x1f, RECVER_DAT[1]);
+}
 bool DFRobot_LoRa::config(uint8_t mode)
 {
-  writeRegister(0x12, 0xff);
-  delay(1);
-  writeRegister(0x01, 0x00);
-  delay(1);
-  writeRegister(0x4b, 0x09);
-  writeRegister(0x01, 0x80);
-  writeRegister(0x06, 0xd9);
-  writeRegister(0x07, 0x20);
-  writeRegister(0x08, 0x00);
-  writeRegister(0x09, 0xff);
-  writeRegister(0x0b, 0x0b);
-  writeRegister(0x0c, 0x23);
-  writeRegister(0x1d, 0x72);
-  writeRegister(0x1e, 0xc7);
-  writeRegister(0x26, 0x08);
-  writeRegister(0x1f, 0xff);
-  writeRegister(0x20, 0x00);
-  writeRegister(0x21, 0x0c);
-  writeRegister(0x41, 0x01);
-  writeRegister(0x01, 0x01);
+//  writeRegister(0x12, 0xff);
+//  delay(1);
+//  writeRegister(0x01, 0x00);
+//  delay(1);
+//  writeRegister(0x4b, 0x09);
+//  writeRegister(0x01, 0x80);
+//  writeRegister(0x06, 0xd9);
+//  writeRegister(0x07, 0x20);
+//  writeRegister(0x08, 0x00);
+//  writeRegister(0x09, 0xff);
+//  writeRegister(0x0b, 0x0b);
+//  writeRegister(0x0c, 0x23);
+//  writeRegister(0x1d, 0x72);
+//  writeRegister(0x1e, 0xc7);
+//  writeRegister(0x26, 0x08);
+//  writeRegister(0x1f, 0xff);
+//  writeRegister(0x20, 0x00);
+//  writeRegister(0x21, 0x0c);
+//  writeRegister(0x41, 0x01);
+//  writeRegister(0x01, 0x01);
 
-  headerMode=LR_EXPLICIT_HEADER_MODE;
-  setHeaderMode(headerMode);
+////  headerMode=LR_EXPLICIT_HEADER_MODE;
+////  setHeaderMode(headerMode);
 
-  if(mode == LR_Mode_TX) {
-    writeRegister(0x4d, 0x87); // * 0x84
-    writeRegister(0x24, 0x00); // * 0xff
-    writeRegister(0x40, 0x41); // * 0x01
-    writeRegister(0x12, 0xff);
-    writeRegister(0x11, 0xf7); // * 0x3f
-    writeRegister(0x22, 0x0d);
-    readRegister(0x0e);
-    writeRegister(0x0d, 0x80);
-    writeRegister(0x01, 0x01);
-  } else {
-    writeRegister(0x4d, 0x84); // * 0x84
-    writeRegister(0x24, 0xff); // * 0xff
-    writeRegister(0x40, 0x01); // * 0x01
-    writeRegister(0x11, 0x3f); // * 0x3f
-    writeRegister(0x12, 0xff);
-    writeRegister(0x22, 0x0d);
-    readRegister(0x0f);
-    writeRegister(0x0d, 0x00);
-    writeRegister(0x01, 0x0d);
-  }
-  setPayloadLength(11);
+//  if(mode == LR_Mode_TX) {
+//    writeRegister(0x4d, 0x87); // * 0x84
+//    writeRegister(0x24, 0x00); // * 0xff
+//    writeRegister(0x40, 0x41); // * 0x01
+//    writeRegister(0x12, 0xff);
+//    writeRegister(0x11, 0xf7); // * 0x3f
+//    writeRegister(0x22, 0x0d);
+//    readRegister(0x0e);
+//    writeRegister(0x0d, 0x80);
+//    writeRegister(0x01, 0x01);
+//  } else {
+//    writeRegister(0x4d, 0x84); // * 0x84
+//    writeRegister(0x24, 0xff); // * 0xff
+//    writeRegister(0x40, 0x01); // * 0x01
+//    writeRegister(0x11, 0x3f); // * 0x3f
+//    writeRegister(0x12, 0xff);
+//    writeRegister(0x22, 0x0d);
+//    readRegister(0x0f);
+//    writeRegister(0x0d, 0x00);
+//    writeRegister(0x01, 0x0d);
+//  }
+
+  writeRegBits(0x01, 0x07, 0, 0);  // sleep mode
+  writeRegBits(0x01, 0x01, 1, 7);  // set to lora mode
+  writeRegBits(0x01, 0x07, 1, 0);  // stand by mode
+  writeRegister(0x40, 0);  // dio map1
+  writeRegister(0x41, 0);  // dio map2
+  setFrequency(868000000);
+  writeRegister(0x4d, 0x87); // max rf power
+  writeRegister(0x09, 0x8f); // max rf power
+  writeRegBits(0x31, 0x07, 3, 0);
+  writeRegBits(0x1e, 0x0f, 11, 4);
+  writeRegBits(0x1d, 0x01, 1, 1);  // enable crc error
+  writeRegBits(0x1d, 0x0F, 7, 4);
+  writeRegBits(0x1d, 0x01, 0, 0);
+  setSymbTimeOut(0x3ff);
+  writeRegBits(0x26, 0x01, 1, 3);
 
   delay(5);
   return true;
@@ -301,17 +333,20 @@ bool DFRobot_LoRa::rxInit()
   setRxInterrupt();	// enable RxDoneIrq
   clearIRQFlags();		// clear irq flag
 //  setFifoAddrPtr(LR_RegFifoRxBaseAddr);	// set FIFO addr
-  config(LR_Mode_RXCONTINUOUS);
-//	enterRxMode();		// start rx
+//  config(LR_Mode_RXCONTINUOUS);
+  writeRegister(0x24, 0xff);
+  enterRxMode();		// start rx
 }
 bool DFRobot_LoRa::sendPackage(uint8_t* sendbuf,uint8_t sendLen)
 {
 	uint8_t temp;
 	
-  config(LR_Mode_TX);
+//  config(LR_Mode_TX);
 	setTxInterrupt();	// enable TxDoneIrq
 	clearIRQFlags();		// clear irq flag
+  writeRegister(0x24, 0);
 	writeFifo(sendbuf,sendLen);
+  setPayloadLength(sendLen);
 	enterTxMode();
 	
 	uint16_t txTimer;
@@ -344,6 +379,10 @@ bool DFRobot_LoRa::waitIrq(uint8_t irqMask)
 	// read irq flag
 	flag=readRegister(LR_RegIrqFlags);
 	// if irq flag was set
+  if(irqMask == LR_RXDONE_MASK) {
+    if(flag & LR_RXPCRCERROR_MASK)
+      Serial.println("LoRa crc error");
+  }
 	if(flag&irqMask)					
 		return true;
 	return false;
@@ -359,12 +398,14 @@ void DFRobot_LoRa::setFifoAddrPtr(uint8_t addrReg)
 void DFRobot_LoRa::enterRxMode()
 {
 	// enter rx continuous mode
-  writeRegister(LR_RegOpMode,LR_Mode_RXCONTINUOUS|LORA_FREQUENCY_BAND);
+  // writeRegister(LR_RegOpMode,LR_Mode_RXCONTINUOUS|LORA_FREQUENCY_BAND);
+  writeRegBits(0x01, 0x07, 0x05, 0);
 }
 void DFRobot_LoRa::enterTxMode()
 {
 	// enter tx mode
-  writeRegister(LR_RegOpMode,LR_Mode_TX|LORA_FREQUENCY_BAND);
+  //writeRegister(LR_RegOpMode,LR_Mode_TX|LORA_FREQUENCY_BAND);
+  writeRegBits(0x01, 0x07, 0x03, 0);
 }
 void DFRobot_LoRa::idle()
 {
@@ -425,31 +466,33 @@ void DFRobot_LoRa::clearIRQFlags()
 uint8_t DFRobot_LoRa::readRegister(uint8_t addr)
 {
 	uint8_t data; 
-	
+  SPI.beginTransaction(SPISettings(1000000, MSBFIRST, SPI_MODE0));
 	digitalWrite(NSSPin, LOW);
 	// write register address
 	SPI.transfer(addr);	
 	// read register value
 	data = SPI.transfer(0);			
 	digitalWrite(NSSPin, HIGH);
-
+  SPI.endTransaction();
 	return(data);
 }
 
 // SPI write register
 void DFRobot_LoRa::writeRegister(uint8_t addr, uint8_t value)                
-{                                                       
+{
+  SPI.beginTransaction(SPISettings(1000000, MSBFIRST, SPI_MODE0));
 	digitalWrite(NSSPin, LOW);
 	// write register address
 	SPI.transfer(addr|LORA_SPI_WNR);	
 	// write register value
 	SPI.transfer(value);			
 	digitalWrite(NSSPin, HIGH);
-	
+  SPI.endTransaction();
 }
 void DFRobot_LoRa::readData(uint8_t addr, uint8_t *ptr, uint8_t len)
 {
 	uint8_t i;
+  SPI.beginTransaction(SPISettings(1000000, MSBFIRST, SPI_MODE0));
 	// length>1,use burst mode
 	if(len<=1)			
 		return;
@@ -461,19 +504,22 @@ void DFRobot_LoRa::readData(uint8_t addr, uint8_t *ptr, uint8_t len)
 			ptr[i] = SPI.transfer(0);
 		digitalWrite(NSSPin, HIGH);
 	}
+  SPI.endTransaction();
 }
 void DFRobot_LoRa::writeData(uint8_t addr, uint8_t *ptr, uint8_t len)
 { 
 	uint8_t i;	
+  SPI.beginTransaction(SPISettings(1000000, MSBFIRST, SPI_MODE0));
 	// length>1,use burst mode
 	if(len<=1)			
 		return;
 	else  
 	{   
 		digitalWrite(NSSPin, LOW);      
-		SPI.transfer(addr|LORA_SPI_WNR);
+    SPI.transfer(addr|LORA_SPI_WNR);
 		for(i=0;i<len;i++)
 			SPI.transfer(ptr[i]);
 		digitalWrite(NSSPin, HIGH); 
 	}
+  SPI.endTransaction();
 }

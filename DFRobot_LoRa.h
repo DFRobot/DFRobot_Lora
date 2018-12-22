@@ -236,6 +236,14 @@
 #define LR_20DB_OUTPUT_ON                 0x07
 #define LR_20DB_OUTPUT_OFF                0x04
 
+typedef enum {
+  eLORAOPModeSleep,
+  eLORAOPModeStandBy,
+  eLORAOPModeFsToTx,
+  eLORAOPModeTx,
+  eLORAOPModeFsToRx,
+  eLORAOPModeRx
+} eLORAOPMode_t;
 
 class DFRobot_LoRa {
 public:
@@ -347,6 +355,14 @@ public:
 	*/
 	bool setTxPower(uint8_t power);
 
+  /**
+     Set payload length
+     @param	len		payload length
+     @note	in  implicit header mode ,payload length must be set first
+     length is fix in  implicit header mode
+  */
+  bool setPayloadLength(uint8_t len);
+
 protected:
 
 	/**
@@ -364,17 +380,7 @@ protected:
 	   Power on lora module
 	*/
 	void powerOnReset();
-	
-	/**
-	   Set payload length
-	   @param	len		payload length
-	   @note	in  implicit header mode ,payload length must be set first
-	   length is fix in  implicit header mode
-	*/
-	bool setPayloadLength(uint8_t len);
-	
 
-	
 	/**
 	   Set rx time out.
 	   @param	 symbTimeOut	actual timeout = symTimeout * (2^SF/BW)
@@ -456,7 +462,9 @@ protected:
 	*/
 	void writeData(uint8_t addr, uint8_t *ptr, uint8_t len);
 
-//	void writeRegBits(uint8_t addr, uint8_t field, uint8_t data, uint8_t offset);
+  void writeRegBits(uint8_t addr, uint8_t field, uint8_t data, uint8_t offset);
+
+  void setSymbTimeOut(uint32_t t);
 	
 private:
 
