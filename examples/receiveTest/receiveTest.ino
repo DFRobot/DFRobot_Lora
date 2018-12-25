@@ -17,8 +17,10 @@
 
 DFRobot_LoRa lora;
 
+#define RX_LEN    16
+
 uint8_t len;
-uint8_t rxBuf[32];
+uint8_t rxBuf[RX_LEN];
 
 uint16_t    sendCounter = 0;
 uint16_t    recvCounter = 0;
@@ -35,7 +37,7 @@ void setup()
     Serial.println("Starting LoRa failed!");
     delay(2000);
   }
-  lora.setPayloadLength(11);
+  lora.setPayloadLength(RX_LEN);  // max len is 254
   lora.rxInit();
 }
 

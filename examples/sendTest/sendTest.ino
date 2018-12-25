@@ -18,7 +18,7 @@
 DFRobot_LoRa lora;
 
 uint16_t sendCounter = 0;
-uint8_t sendBuf[] = "HelloWorld!";
+uint8_t sendBuf[] = "1234567812345678";
 
 /* The default pin:
  *		SS:D4
@@ -48,7 +48,7 @@ void loop()
   blink = ~blink;
 
   // send packet
-  lora.sendPackage(sendBuf, sizeof(sendBuf)); // sending data
+  lora.sendPackage(sendBuf, sizeof(sendBuf)); // sending data, max len is 254
   lora.idle();    // turn to standby mode
 
   sendCounter++;
@@ -59,5 +59,5 @@ if(counter%10 == 0) {
 }
 #endif
 
-  delay(1000);
+  delay(2000);
 }

@@ -63,54 +63,6 @@ void DFRobot_LoRa::powerOnReset()
 	digitalWrite(NRESETPin, HIGH);
 	delay(10);	
 }
-//bool DFRobot_LoRa::config()
-//{
-//	// In setting mode, RF module should turn to sleep mode
-//	// low frequency mode，sleep mode
-//	writeRegister(LR_RegOpMode,LR_Mode_SLEEP|LORA_FREQUENCY_BAND);
-//	// wait for steady
-//	delay(5);
-
-//	// external Crystal
-//	writeRegister(LR_RegTCXO,LR_EXT_CRYSTAL|LR_REGTCXO_RESERVED);
-//	// set lora mode
-//	writeRegister(LR_RegOpMode,LR_LongRangeMode_LORA|LORA_FREQUENCY_BAND);
-//	// RF frequency 434M
-//	setFrequency(434000000);
-//	// max power ,20dB
-//	setTxPower(0x0f);
-//	// close ocp
-//	writeRegister(LR_RegOcp,LR_OCPON_OFF|0x0B);
-//	// enable LNA
-//	writeRegister(LR_RegLna,LR_LNAGAIN_G1|LR_LNABOOSTHF_1);
-	
-//	headerMode=LR_EXPLICIT_HEADER_MODE;
-	
-//	// bandwidth = 500Hz, spreading factor=7,
-//	// coding rate = 4/5,implict header mode
-//	setHeaderMode(headerMode);
-//	setRFpara(LR_BW_125k,LR_CODINGRATE_1p5,LR_SPREADING_FACTOR_11,LR_PAYLOAD_CRC_ON);
-//	// LNA
-//	writeRegister(LR_RegModemConfig3,LR_MOBILE_MODE);
-//	// max rx time out
-//	setRxTimeOut(0x3ff);
-//	// preamble 12+4.25 bytes
-//	setPreambleLen(12);
-
-//	// 20dBm on PA_BOOST pin
-//	writeRegister(LR_RegPADAC,LR_REGPADAC_RESERVED|LR_20DB_OUTPUT_ON);
-//	 // no hopping
-//	writeRegister(LR_RegHopPeriod,0x00);
-
-//	// DIO5=ModeReady,DIO4=CadDetected
-//	writeRegister(LR_RegDIOMAPPING2,LR_DIO4_CADDETECTED|LR_DIO5_MODEREADY);
-//	 // standby mode
-//	writeRegister(LR_RegOpMode,LR_LongRangeMode_LORA|LR_Mode_STBY|LORA_FREQUENCY_BAND);
-	
-//	// default payload length is 10 bytes in implicit mode
-//	setPayloadLength(10);
-
-//}
 void DFRobot_LoRa::writeRegBits(uint8_t addr, uint8_t field, uint8_t data, uint8_t offset)
 {
   uint8_t   val = readRegister(addr);
@@ -128,6 +80,21 @@ void DFRobot_LoRa::setSymbTimeOut(uint32_t t)
   writeRegister( 0x1e, RECVER_DAT[0]);
   writeRegister( 0x1f, RECVER_DAT[1]);
 }
+void DFRobot_LoRa::writeBuffer(uint8_t addr, uint8_t *pBuf, uint8_t len)
+{
+  SPI.begin();
+  SPI.beginTransaction(SPISettings(1000000, MSBFIRST, SPI_MODE0));
+  digitalWrite(NSSPin, LOW);
+  SPI.transfer(addr);
+  for(uint8_t i = 0; i < len; i ++)
+    SPI.transfer(pBuf[i]);
+  digitalWrite(NSSPin, HIGH);
+  SPI.endTransaction();
+}
+
+const uint8_t   pConfTable1[] = {0x6c, 0x80, 0x00, 0xcf, 0x09, 0x1b, 0x20, 0x00, 0x80, 0x00};
+const uint8_t   pConfTable2[] = {0x72, 0x73, 0xff, 0x00, 0x08, 0x01, 0xff, 0x00};
+
 bool DFRobot_LoRa::config(uint8_t mode)
 {
 //  writeRegister(0x12, 0xff);
@@ -179,18 +146,75 @@ bool DFRobot_LoRa::config(uint8_t mode)
   writeRegBits(0x01, 0x07, 0, 0);  // sleep mode
   writeRegBits(0x01, 0x01, 1, 7);  // set to lora mode
   writeRegBits(0x01, 0x07, 1, 0);  // stand by mode
-  writeRegister(0x40, 0);  // dio map1
-  writeRegister(0x41, 0);  // dio map2
-  setFrequency(868000000);
-  writeRegister(0x4d, 0x87); // max rf power
-  writeRegister(0x09, 0x8f); // max rf power
-  writeRegBits(0x31, 0x07, 3, 0);
+  writeBuffer(0x06, (uint8_t*) pConfTable1, sizeof(pConfTable1));
+  writeBuffer(0x1d, (uint8_t*) pConfTable2, sizeof(pConfTable2));
+  writeRegister(0x26, 0x08);
+  writeRegister(0x40, 0x00);
+  writeRegister(0x41, 0x00);
+  writeRegister(0x4d, 0x87);
+  writeRegister(0x70, 0x10);
+
+  writeRegBits(0x01, 0x07, 1, 0);  // stand by mode
+  writeRegister(0x26, 0x00);
+  writeRegister(0x26, 0x02);
+  writeRegister(0x3a, 0x7f);
+  writeRegBits(0x31, 0x01, 1, 0);
+  writeRegBits(0x1d, 0x0f, 9, 4);
   writeRegBits(0x1e, 0x0f, 11, 4);
-  writeRegBits(0x1d, 0x01, 1, 1);  // enable crc error
-  writeRegBits(0x1d, 0x0F, 7, 4);
-  writeRegBits(0x1d, 0x01, 0, 0);
-  setSymbTimeOut(0x3ff);
-  writeRegBits(0x26, 0x01, 1, 3);
+  writeRegBits(0x1d, 0x07, 1, 1);
+  setFrequency(868000000);
+
+  writeRegBits(0x01, 0x07, 1, 0);  // stand by mode
+  writeRegBits(0x4d, 0x07, 0x07, 0);
+  writeRegBits(0x09, 0x01, 1, 7);
+  writeRegBits(0x09, 0x0f, 1, 0);
+  setPreambleLen(16);
+  rxInit();
+
+//  // In setting mode, RF module should turn to sleep mode
+//  // low frequency mode£¬sleep mode
+//  writeRegister(LR_RegOpMode,LR_Mode_SLEEP|LORA_FREQUENCY_BAND);
+//  // wait for steady
+//  delay(5);
+
+//  // external Crystal
+//  writeRegister(LR_RegTCXO,LR_EXT_CRYSTAL|LR_REGTCXO_RESERVED);
+//  // set lora mode
+//  writeRegister(LR_RegOpMode,LR_LongRangeMode_LORA|LORA_FREQUENCY_BAND);
+//  // RF frequency 434M
+//  setFrequency(434000000);
+//  // max power ,20dB
+//  setTxPower(0x0f);
+//  // close ocp
+//  writeRegister(LR_RegOcp,LR_OCPON_OFF|0x0B);
+//  // enable LNA
+//  writeRegister(LR_RegLna,LR_LNAGAIN_G1|LR_LNABOOSTHF_1);
+
+//  headerMode=LR_EXPLICIT_HEADER_MODE;
+
+//  // bandwidth = 500Hz, spreading factor=7,
+//  // coding rate = 4/5,implict header mode
+//  setHeaderMode(headerMode);
+//  setRFpara(LR_BW_125k,LR_CODINGRATE_1p5,LR_SPREADING_FACTOR_11,LR_PAYLOAD_CRC_ON);
+//  // LNA
+//  writeRegister(LR_RegModemConfig3,LR_MOBILE_MODE);
+//  // max rx time out
+//  setRxTimeOut(0x3ff);
+//  // preamble 12+4.25 bytes
+//  setPreambleLen(12);
+
+//  // 20dBm on PA_BOOST pin
+//  writeRegister(LR_RegPADAC,LR_REGPADAC_RESERVED|LR_20DB_OUTPUT_ON);
+//   // no hopping
+//  writeRegister(LR_RegHopPeriod,0x00);
+
+//  // DIO5=ModeReady,DIO4=CadDetected
+//  writeRegister(LR_RegDIOMAPPING2,LR_DIO4_CADDETECTED|LR_DIO5_MODEREADY);
+//   // standby mode
+//  writeRegister(LR_RegOpMode,LR_LongRangeMode_LORA|LR_Mode_STBY|LORA_FREQUENCY_BAND);
+
+//  // default payload length is 10 bytes in implicit mode
+//  setPayloadLength(10);
 
   delay(5);
   return true;
@@ -201,20 +225,6 @@ bool DFRobot_LoRa::setFrequency(uint32_t freq)
 	uint32_t temp1;
 	uint32_t temp2;
 	uint8_t reg[3];
-
-	// Frf(23:0)=frequency/(XOSC/2^19)
-	
-//	temp1=freq/1000000;
-//	temp2=LORA_XOSC/1000000;
-//	frf=temp1*524288/temp2;
-
-//	temp1=freq%1000000/1000;
-//	temp2=LORA_XOSC/1000;
-//	frf=frf+temp1*524288/temp2;
-
-//	temp1=freq%1000;
-//	temp2=LORA_XOSC;
-//	frf=frf+temp1*524288/temp2;
 
   frf = freq / (LORA_XOSC / 524288);
 	
@@ -328,31 +338,45 @@ uint8_t DFRobot_LoRa::readRSSI(uint8_t mode)
 
 bool DFRobot_LoRa::rxInit()
 {
-//	if(headerMode==LR_IMPLICIT_HEADER_MODE)
-//		setPayloadLength(payloadLength);
-  setRxInterrupt();	// enable RxDoneIrq
-  clearIRQFlags();		// clear irq flag
+//  if(headerMode==LR_IMPLICIT_HEADER_MODE)
+//    setPayloadLength(payloadLength);
+//  setRxInterrupt();	// enable RxDoneIrq
+//  clearIRQFlags();		// clear irq flag
 //  setFifoAddrPtr(LR_RegFifoRxBaseAddr);	// set FIFO addr
-//  config(LR_Mode_RXCONTINUOUS);
-  writeRegister(0x24, 0xff);
-  enterRxMode();		// start rx
+//  enterRxMode();		// start rx
+
+  writeRegBits(0x01, 0x07, 1, 0);  // stand by mode
+  writeRegBits(0x31, 0x01, 0x01, 5);
+  writeRegister(0x11, 0x9e);
+  writeRegister(0x24, 0);
+  writeRegister(0x40, 0x00);
+  writeRegister(0x41, 0x00);
+  writeRegister(0x0d, readRegister(0x0f));
+  writeRegBits(0x01, 0x07, 0x05, 0);
+
 }
 bool DFRobot_LoRa::sendPackage(uint8_t* sendbuf,uint8_t sendLen)
 {
 	uint8_t temp;
 	
-//  config(LR_Mode_TX);
-	setTxInterrupt();	// enable TxDoneIrq
-	clearIRQFlags();		// clear irq flag
+//  setTxInterrupt();	// enable TxDoneIrq
+//  clearIRQFlags();		// clear irq flag
+//  writeFifo(sendbuf,sendLen);
+//  enterTxMode();
+
+  writeRegBits(0x01, 0x07, 1, 0);  // stand by mode
   writeRegister(0x24, 0);
-	writeFifo(sendbuf,sendLen);
-  setPayloadLength(sendLen);
-	enterTxMode();
+  writeRegister(0x11, 0xf7);
+  writeRegister(0x22, sendLen);
+  writeRegister(0x0e, 0x00);
+  writeRegister(0x0d, 0x00);
+  writeFifo(sendbuf, sendLen);
+  writeRegBits(0x01, 0x07, 0x03, 0);
 	
 	uint16_t txTimer;
 
 	// you should make sure the tx timeout is greater than the max time on air
-	txTimer=LORA_TX_TIMEOUT;
+  txTimer=2000;
 	while(txTimer--)
 	{
 		// wait for txdone
@@ -380,8 +404,10 @@ bool DFRobot_LoRa::waitIrq(uint8_t irqMask)
 	flag=readRegister(LR_RegIrqFlags);
 	// if irq flag was set
   if(irqMask == LR_RXDONE_MASK) {
-    if(flag & LR_RXPCRCERROR_MASK)
+    if(flag & LR_RXPCRCERROR_MASK) {
       Serial.println("LoRa crc error");
+      return false;
+    }
   }
 	if(flag&irqMask)					
 		return true;
@@ -398,13 +424,13 @@ void DFRobot_LoRa::setFifoAddrPtr(uint8_t addrReg)
 void DFRobot_LoRa::enterRxMode()
 {
 	// enter rx continuous mode
-  // writeRegister(LR_RegOpMode,LR_Mode_RXCONTINUOUS|LORA_FREQUENCY_BAND);
+//  writeRegister(LR_RegOpMode,LR_LongRangeMode_LORA|LR_Mode_RXCONTINUOUS|LORA_FREQUENCY_BAND);
   writeRegBits(0x01, 0x07, 0x05, 0);
 }
 void DFRobot_LoRa::enterTxMode()
 {
 	// enter tx mode
-  //writeRegister(LR_RegOpMode,LR_Mode_TX|LORA_FREQUENCY_BAND);
+//  writeRegister(LR_RegOpMode,LR_LongRangeMode_LORA|LR_Mode_TX|LORA_FREQUENCY_BAND);
   writeRegBits(0x01, 0x07, 0x03, 0);
 }
 void DFRobot_LoRa::idle()
@@ -421,8 +447,8 @@ void DFRobot_LoRa::sleep()
 void DFRobot_LoRa::writeFifo(uint8_t* databuf,uint8_t length)
 {
 	// set packet length
-//	if(headerMode==LR_EXPLICIT_HEADER_MODE)
-//		writeRegister(LR_RegPayloadLength,length);
+//  if(headerMode==LR_EXPLICIT_HEADER_MODE)
+//    writeRegister(LR_RegPayloadLength,length);
 	// set Fifo addr
   setFifoAddrPtr(LR_RegFifoTxBaseAddr);
 	// fill data into fifo
@@ -456,7 +482,7 @@ void DFRobot_LoRa::setRxInterrupt()
 	//DIO0=00, DIO1=00, DIO2=00, DIO3=01  DIO0=00--RXDONE
 	writeRegister(LR_RegDIOMAPPING1,LR_DIO0_RXDONE);	
 	// enable rxdone irq
-	writeRegister(LR_RegIrqFlagsMask,0xff^LR_RXDONE_MASK);			
+  writeRegister(LR_RegIrqFlagsMask,0xff^(LR_RXDONE_MASK | LR_RXPCRCERROR_MASK));
 }
 void DFRobot_LoRa::clearIRQFlags()
 {

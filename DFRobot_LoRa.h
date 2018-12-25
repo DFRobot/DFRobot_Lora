@@ -463,8 +463,8 @@ protected:
 	void writeData(uint8_t addr, uint8_t *ptr, uint8_t len);
 
   void writeRegBits(uint8_t addr, uint8_t field, uint8_t data, uint8_t offset);
-
   void setSymbTimeOut(uint32_t t);
+  void writeBuffer(uint8_t addr, uint8_t *pBuf, uint8_t len);
 	
 private:
 
