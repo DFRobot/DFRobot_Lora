@@ -18,7 +18,7 @@
 DFRobot_LoRa lora;
 
 uint16_t sendCounter = 0;
-uint8_t sendBuf[] = "1234567812345678";
+uint8_t sendBuf[] = "HelloWorld!";
 
 /* The default pin:
  *		SS:D4
@@ -36,6 +36,7 @@ void setup()
     Serial.println("Starting LoRa failed!");
     delay(2000);
   }
+  //lora.setFrequency(433000000);  // for 433mhz module
   Serial.println("LoRa begin successed");
 }
 

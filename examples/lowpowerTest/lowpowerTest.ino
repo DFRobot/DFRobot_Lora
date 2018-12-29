@@ -32,7 +32,7 @@ void setup()
 	}
 	
 	// frequency:the range is 137~1020Mhz for lora1276 ,137~525Mhz for lora1278
-  lora.setFrequency(868000000);
+  lora.setFrequency(433000000);
 	/*
 	BW	        bandwidth , range from 0 to 9
 	CR	        coding rate , range from 4/5 to 4/8---2,4,6,8

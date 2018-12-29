@@ -17,7 +17,7 @@
 
 DFRobot_LoRa lora;
 
-#define RX_LEN    16
+#define RX_LEN    11
 
 uint8_t len;
 uint8_t rxBuf[RX_LEN];
@@ -38,6 +38,7 @@ void setup()
     delay(2000);
   }
   lora.setPayloadLength(RX_LEN);  // max len is 254
+  //lora.setFrequency(433000000);  // for 433mhz module
   lora.rxInit();
 }
 
