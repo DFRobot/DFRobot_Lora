@@ -37,6 +37,12 @@ The library is used to Send and receive Long Range Radio data.
     bool rxInit();
 ```
 
+### Set payload length
+
+```C++
+    bool setPayloadLength(uint8_t len);
+```
+
 ### Sending packet through RF
 ```C++
     bool sendPackage(uint8_t* sendbuf,uint8_t sendLen); // length of data to send,less than 64 bytes

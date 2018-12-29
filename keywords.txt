@@ -24,6 +24,7 @@ setRFpara   		KEYWORD2
 setPreambleLen  	KEYWORD2
 setHeaderMode  		KEYWORD2
 readRSSI			KEYWORD2
+setPayloadLength	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
