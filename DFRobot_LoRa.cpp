@@ -172,7 +172,7 @@ bool DFRobot_LoRa::config(uint8_t mode)
   rxInit();
 
 //  // In setting mode, RF module should turn to sleep mode
-//  // low frequency mode£¬sleep mode
+//  // low frequency mode????sleep mode
 //  writeRegister(LR_RegOpMode,LR_Mode_SLEEP|LORA_FREQUENCY_BAND);
 //  // wait for steady
 //  delay(5);
@@ -239,6 +239,7 @@ bool DFRobot_LoRa::setFrequency(uint32_t freq)
 	// read if the value has been in register
 	if((reg[0]!=readRegister(LR_RegFrMsb))||(reg[1]!=readRegister(LR_RegFrMid))||(reg[2]!=readRegister(LR_RegFrLsb)))
 		return false;
+	return true;
 }
 bool DFRobot_LoRa::setRFpara(uint8_t BW,uint8_t CR,uint8_t SF,uint8_t payloadCRC)
 {
@@ -285,7 +286,8 @@ bool DFRobot_LoRa::setPreambleLen(uint16_t length)
 		return false;
 	writeRegister(LR_RegPreambleMsb,length>>8);
 	 // the actual preamble len is length+4.25
-	writeRegister(LR_RegPreambleLsb,length&0xff);     
+	writeRegister(LR_RegPreambleLsb,length&0xff);  
+    return true;	
 }
 bool DFRobot_LoRa::setHeaderMode(uint8_t mode)
 {
@@ -298,6 +300,7 @@ bool DFRobot_LoRa::setHeaderMode(uint8_t mode)
 	temp=readRegister(LR_RegModemConfig1);
 	temp=temp&0xfe;
 	writeRegister(LR_RegModemConfig1,temp|mode);
+	return true;
 }
 // in implict header mode, the payload length is fix len
 // need to set payload length first in this mode
@@ -305,12 +308,14 @@ bool DFRobot_LoRa::setPayloadLength(uint8_t len)
 {
 	payloadLength=len;
 	writeRegister(LR_RegPayloadLength,len);
+	return true;
 }
 bool DFRobot_LoRa::setTxPower(uint8_t power)
 {
 	if(power>0x0f)
 		return false;
 	writeRegister(LR_RegPaConfig,LR_PASELECT_PA_POOST|0x70|power);
+	return true;
 }
 // only valid in rx single mode
 bool DFRobot_LoRa::setRxTimeOut(uint16_t symbTimeOut)
@@ -323,7 +328,8 @@ bool DFRobot_LoRa::setRxTimeOut(uint16_t symbTimeOut)
 	temp=readRegister(LR_RegModemConfig2);
 	temp=temp&0xfc;
 	writeRegister(LR_RegModemConfig2,temp|(symbTimeOut>>8&0x03));
-	writeRegister(LR_RegSymbTimeoutLsb,symbTimeOut&0xff); 
+	writeRegister(LR_RegSymbTimeoutLsb,symbTimeOut&0xff);
+	return true;
 }
 // RSSI[dBm]=-137+rssi value
 uint8_t DFRobot_LoRa::readRSSI(uint8_t mode)
@@ -353,7 +359,7 @@ bool DFRobot_LoRa::rxInit()
   writeRegister(0x41, 0x00);
   writeRegister(0x0d, readRegister(0x0f));
   writeRegBits(0x01, 0x07, 0x05, 0);
-
+  return true;
 }
 bool DFRobot_LoRa::sendPackage(uint8_t* sendbuf,uint8_t sendLen)
 {
