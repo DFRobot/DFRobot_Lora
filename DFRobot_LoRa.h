@@ -383,7 +383,7 @@ protected:
    * @param mode RF frequency=434Mhz,bandwidth = 500Hz,spreading factor=7,coding rate = 4/5,explict header mode
    * @return  true if ok, false otherwise
    */
-  bool config(uint8_t mode);
+  bool config();
 
   /**
    * @fn setFifoAddrPtr

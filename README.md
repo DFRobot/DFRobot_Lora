@@ -171,6 +171,7 @@ FireBeetle-328P    |      √       |             |            |
 
 ## History
 
+- 2021/11/01 - Version 1.0.3 released.
 - 2021/11/01 - Version 1.0.2 released.
 - 2021/10/18 - Version 1.0.1 released.
 - 2017/08/30 - version 1.0.0 released.

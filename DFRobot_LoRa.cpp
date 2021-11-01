@@ -37,7 +37,7 @@ bool DFRobot_LoRa::init(uint8_t _NSSPin, uint8_t _NRESETPin)
   if (version != 0x12) {
     return false;
   }
-  config(LR_Mode_RXCONTINUOUS);
+  config();
   return true;
 }
 
@@ -83,7 +83,7 @@ void DFRobot_LoRa::writeBuffer(uint8_t addr, uint8_t *pBuf, uint8_t len)
 const uint8_t pConfTable1[] = {0x6c, 0x80, 0x00, 0xcf, 0x09, 0x1b, 0x20, 0x00, 0x80, 0x00};
 const uint8_t pConfTable2[] = {0x72, 0x73, 0xff, 0x00, 0x08, 0x01, 0xff, 0x00};
 
-bool DFRobot_LoRa::config(uint8_t mode)
+bool DFRobot_LoRa::config()
 {
 
   writeRegBits(0x01, 0x07, 0, 0);  // sleep mode
@@ -119,8 +119,6 @@ bool DFRobot_LoRa::config(uint8_t mode)
 bool DFRobot_LoRa::setFrequency(uint32_t freq)
 {
   uint32_t frf;
-  uint32_t temp1;
-  uint32_t temp2;
   uint8_t reg[3];
   frf = freq / (LORA_XOSC / 524288);
   
@@ -247,7 +245,6 @@ bool DFRobot_LoRa::rxInit()
 }
 bool DFRobot_LoRa::sendPackage(uint8_t* sendbuf,uint8_t sendLen)
 {
-  uint8_t temp;
   writeRegBits(0x01, 0x07, 1, 0);  // stand by mode
   writeRegister(0x24, 0);
   writeRegister(0x11, 0xf7);
