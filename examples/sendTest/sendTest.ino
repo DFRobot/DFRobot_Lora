@@ -4,13 +4,13 @@
  * @n [Get the module here]
  * @n This example is send.
  * @n [Connection and Diagram]
- *
- * @copyright	[DFRobot](http://www.dfrobot.com), 2016
- * @copyright	GNU Lesser General Public License
- *
+ * @copyright	Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
+ * @license     The MIT License (MIT)
  * @author [yangyang]
+ * @maintainer [Fary](feng.yang@dfrobot.com)
  * @version  V1.0
- * @date  2017-04-10
+ * @date  2021-11-01
+ * @url https://github.com/DFRobot/DFRobot_LoRa
  */
 
 #include <DFRobot_LoRa.h>
